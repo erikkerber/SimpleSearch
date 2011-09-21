@@ -25,7 +25,8 @@ class Document:
 		self.term_weights = self._get_term_weights()
 		self.length = self._get_length()
 		
-		
+	# Turns a document into a dictionary of words with the frequency of those words.
+	# Additionally, it returns the maximum count of any given word.
 	def _tokenize(self, document):
 		word_count = defaultdict(int)
 		highest = 0
@@ -67,12 +68,23 @@ class DocumentCollection:
 	documents = None
 	
 	def __init__(self, documents):
-		self.documents = documents
+		self.documents = list(documents)
 		for doc in documents:
 			for word in doc.word_count:
 				self.word_count[word] += doc.word_count[word]
 				self.word_documentcount[word] += 1
 		self.word_idf = self._get_idf()
+		self.currentIndex = 0
+	
+	def __iter__(self):
+		return self
+		
+	def next(self):
+		if self.currentIndex == len(self.documents):
+			raise StopIteration
+		else:
+			self.currentIndex += 1
+			return self.documents[self.currentIndex - 1]
 	
 	# idf = log2[(total number of documents)/(number of documents containing the term)]
 	def _get_idf(self):
@@ -113,9 +125,21 @@ d3 = Document(D3)
 q = Document(Q)
 doc_collection = DocumentCollection({ d1, d2, d3 })
 
-print doc_collection.get_weights(d3)
-print similarity(d2, d3, doc_collection)
-#print similarity(q, d1, doc_collection)
+#for doc in doc_collection:
+#	print '********'
+#	for word in doc.document:
+#		print word
 
-#print a.word_idf
+
+print 'D3 Weights - '
+for word, weight in doc_collection.get_weights(d3).items():
+	print "{0}	{1}".format(word, weight)
+	
+print ''
+
+
+
+print 'Q to D1', similarity(q, d1, doc_collection)
+print 'Q to D2', similarity(q, d2, doc_collection)
+print 'Q to D3', similarity(q, d3, doc_collection)
 
