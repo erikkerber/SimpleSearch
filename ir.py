@@ -64,16 +64,18 @@ class DocumentCollection:
 	The collection is necessary because the idf needs calculates
 	based upon the total number of *documents* that contain a term.
 	
-	word_count:	hash of each word and how many times that word appears.
+	word_count:	hash of each word and how many times that word appears in all documents.
+	word_idf: hash of each word and its idf value
+	documents: hash of the documents with the name of the document of the key
+	maxterm: hash of the maximum occurence of any word in any document
+	docfreq: the number of documents any given term exists in
 	
 	"""
 	word_count = defaultdict(int)
-	word_documentcount = defaultdict(int)
 	word_idf = defaultdict(float)
-	document_length = defaultdict(float)
 	documents = defaultdict(Document)
-	maxterm = defaultdict(int)
-
+	maxterm = defaultdict(int) # (document_name, int)
+	docfreq = defaultdict(int) # (word, int)
 	
 	def add_document(self, document):
 		self.documents[document.name] = document
@@ -85,12 +87,12 @@ class DocumentCollection:
 			self.word_count[word] += document.word_count[word]
 			
 			# Increment the total number of documents this word appears in.
-			self.word_documentcount[word] += 1
+			self.docfreq[word] += 1
 			
 		# Recalculate the idf hash.
 		for word in self.word_count:
 			# idf = log2[(total number of documents)/(number of documents containing the term)]
-			self.word_idf[word] = math.log(float(len(self.documents)) / float(self.word_documentcount[word]), 2)
+			self.word_idf[word] = math.log(float(len(self.documents)) / float(self.docfreq[word]), 2)
 	
 	
 	def get_weights(self, document):
