@@ -8,9 +8,6 @@ import ir
 
 documents = ('D1.txt','D2.txt','D3.txt')
 
-#D1 = 'The quick brown fox jumps over a lazy brown dog'
-#D2 = 'Waltz, nymph, for quick jigs vex Bud'
-#D3 = 'How quickly daft jumping zebras vex'
 Q = ' QUICK BROWN VEX ZEBRAS'.lower()
 
 

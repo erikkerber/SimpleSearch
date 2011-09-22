@@ -53,6 +53,9 @@ class Document:
 			word_tf[word] = float(self.word_count[word])/float(max)
 		return word_tf
 
+	def __iter__(self):
+		return self.word_count.__iter__()
+		
 
 class DocumentCollection:
 	"""
@@ -74,6 +77,8 @@ class DocumentCollection:
 	
 	def add_document(self, document):
 		self.documents[document.name] = document
+		self.maxterm[document.name] = max(document.word_count.values())
+		
 		for word in document.word_count:
 			
 			# Add the word to the total word count.
@@ -87,29 +92,26 @@ class DocumentCollection:
 			# idf = log2[(total number of documents)/(number of documents containing the term)]
 			self.word_idf[word] = math.log(float(len(self.documents)) / float(self.word_documentcount[word]), 2)
 	
-		
-	def get_weights(self, query):
+	
+	def get_weights(self, document):
 		dict = defaultdict(int)
-		for word in query.word_count:
-			dict[word] = self.word_idf[word] * query.word_tf[word]
+		for word in document.word_count:
+			dict[word] = self.word_idf[word] * document.word_tf[word]
 		return dict
 		
 	def getlength(self, document):
 		length = 0
-		for word in document.word_count:
-			length += (self.word_idf[word] * document.word_tf[word])**2
-		return math.sqrt(length)
-		
-	def getQlength(self, query):
-		length = 0
-		for word in query:
-			length += (self.word_idf[word])**2
+		for word in document:
+			if isinstance(document, Document):
+				length += (self.word_idf[word] * document.word_tf[word])**2
+			else:
+				length += (self.word_idf[word])**2
 		return math.sqrt(length)
 		
 		
 def similarity(query, document, doc_collection):
 	q = query.split()
-	return dot_product(q, document, doc_collection) / (doc_collection.getQlength(q) * doc_collection.getlength(document))
+	return dot_product(q, document, doc_collection) / (doc_collection.getlength(q) * doc_collection.getlength(document))
 
 def dot_product(query, document, document_collection):
 	total = 0
