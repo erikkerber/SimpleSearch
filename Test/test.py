@@ -7,7 +7,7 @@ from collections import defaultdict
 
 documents = ('D1.txt','D2.txt','D3.txt')
 
-Q = ' QUICK BROWN VEX ZEBRAS'.lower()
+Q = ' QUICK BROWN VEX ZEBRAS'
 
 
 collection = ir.DocumentCollection()

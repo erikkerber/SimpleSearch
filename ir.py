@@ -122,7 +122,7 @@ class DocumentCollection:
 	
 	# Calculates the similarity between a query and a given document in the collection.
 	def similarity(self, query, document):
-		q = query.split()
+		q = query.lower().split()
 		return self._dot_product(q, document) / (self.getlength(q) * self.getlength(document))
 		
 		
