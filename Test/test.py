@@ -1,10 +1,9 @@
 import sys
 sys.path.append('../')
 import ir
+from collections import defaultdict
 
 # Test data for homework 2.
-
-
 
 documents = ('D1.txt','D2.txt','D3.txt')
 
@@ -28,7 +27,12 @@ for word, weight in collection.get_weights(d3).items():
 	
 print ''
 
+similarities = defaultdict(float)
 
-print 'Q to D1', ir.similarity(Q, d1, collection)
-print 'Q to D2', ir.similarity(Q, d2, collection)
-print 'Q to D3', ir.similarity(Q, d3, collection)
+similarities[d1] =  collection.similarity(Q, d1)
+similarities[d2] =  collection.similarity(Q, d2)
+similarities[d3] =  collection.similarity(Q, d3)
+
+print 'Similarities of Q on documents 1-3, ranked from best to worse.'
+for (document, result) in sorted( similarities.items(), reverse=True):
+	print "{0}	{1}".format(document.name, result)

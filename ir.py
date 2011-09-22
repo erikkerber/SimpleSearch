@@ -95,12 +95,14 @@ class DocumentCollection:
 			self.word_idf[word] = math.log(float(len(self.documents)) / float(self.docfreq[word]), 2)
 	
 	
+	# Gets a hash of the weights of the words in a given document.
 	def get_weights(self, document):
 		dict = defaultdict(int)
 		for word in document.word_count:
 			dict[word] = self.word_idf[word] * document.word_tf[word]
 		return dict
 		
+	# Gets the length of either a document, or a query. A query does not use a tf value.
 	def getlength(self, document):
 		length = 0
 		for word in document:
@@ -110,17 +112,23 @@ class DocumentCollection:
 				length += (self.word_idf[word])**2
 		return math.sqrt(length)
 		
+	# Calculates dot-product of a query and a document.
+	def _dot_product(self, query, document):
+		total = 0
+		words = set(query).intersection(set(document.word_count))
+		for word in words:
+			total += self.word_idf[word] * self.get_weights(document)[word]
+		return total
+	
+	# Calculates the similarity between a query and a given document in the collection.
+	def similarity(self, query, document):
+		q = query.split()
+		return self._dot_product(q, document) / (self.getlength(q) * self.getlength(document))
 		
-def similarity(query, document, doc_collection):
-	q = query.split()
-	return dot_product(q, document, doc_collection) / (doc_collection.getlength(q) * doc_collection.getlength(document))
+		
 
-def dot_product(query, document, document_collection):
-	total = 0
-	words = set(query).intersection(set(document.word_count))
-	for word in words:
-		total += document_collection.word_idf[word] * document_collection.get_weights(document)[word]
-	return total
+
+
 
 
 
