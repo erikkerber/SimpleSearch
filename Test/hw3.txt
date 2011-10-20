@@ -1,0 +1,24 @@
+Document Weights - 
+quick		0.292481250361		D1.txt
+a		0.792481250361		D1.txt
+lazy		0.792481250361		D1.txt
+over		0.792481250361		D1.txt
+fox		0.792481250361		D1.txt
+dog		0.792481250361		D1.txt
+the		0.792481250361		D1.txt
+jumps		0.792481250361		D1.txt
+brown		1.58496250072		D1.txt
+vex		0.584962500721		D2.txt
+quick		0.584962500721		D2.txt
+waltz		1.58496250072		D2.txt
+for		1.58496250072		D2.txt
+nymph		1.58496250072		D2.txt
+jigs		1.58496250072		D2.txt
+bud		1.58496250072		D2.txt
+vex		0.584962500721		D3.txt
+zebras		1.58496250072		D3.txt
+daft		1.58496250072		D3.txt
+quickly		1.58496250072		D3.txt
+how		1.58496250072		D3.txt
+jumping		1.58496250072		D3.txt
+

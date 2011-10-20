@@ -22,19 +22,22 @@ class Document:
 		try:
 			doc = open(name).read()
 		except:
-			print "Can't read ", name
-			
+			doc = name + '\n' # Hack so that \W+ works for single word.
+
 		self.name = name	
-			
+		
+		# Raw original source
+		self.source = doc
+		
 		# Split the document into a list of words
-		self.document = re.split('\W+', str.lower(doc))
+		self.document = re.split('\W', str.lower(doc))
 		
 		# Pop off the always-empty-last-element. I am still stupid at Python.
 		self.document.pop()
 		
 		# Count the words into a hash
 		self.word_count = self._count_words(self.document)
-
+		
 		# Now that all the words are counted, calculate each words tf.
 		self.word_tf = self._get_tf(max(self.word_count.values()))
 		
@@ -92,7 +95,11 @@ class DocumentCollection:
 		# Recalculate the idf hash.
 		for word in self.word_count:
 			# idf = log2[(total number of documents)/(number of documents containing the term)]
-			self.word_idf[word] = math.log(float(len(self.documents)) / float(self.docfreq[word]), 2)
+			idf = math.log(float(len(self.documents)) / float(self.docfreq[word]), 2)
+			if idf == 0:
+				self.word_idf[word] = .5
+			else:
+				self.word_idf[word] = idf
 	
 	
 	# Gets a hash of the weights of the words in a given document.
@@ -125,7 +132,8 @@ class DocumentCollection:
 		q = query.lower().split()
 		return self._dot_product(q, document) / (self.getlength(q) * self.getlength(document))
 		
-		
+	def __iter__(self):
+		return self.documents.values().__iter__()
 
 
 
