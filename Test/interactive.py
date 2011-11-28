@@ -37,10 +37,10 @@ while True:
 	else:
 		Q = ir.Document(query)
 		# * Find the terms in the query, and calculate the appropriate weight for each query term
-		for key, value in Q.word_tf.items():
-			print key, value
+		#for key, value in Q.word_tf.items():
+		#	print key, value
 
-		print '____________________'
+		#print '____________________'
 
 		# * Calculate the similarity for each query/document pair
 		similarities = defaultdict(float)
